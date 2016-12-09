@@ -1,10 +1,11 @@
 syntax on
 colorscheme wellsokai
-set nocompatible              " be iMproved, required
+set nocompatible
 set ttyfast
 set mouse=a
 set ttymouse=xterm2
-filetype off                  " required
+set rnu
+filetype off
 :set tabstop=2 shiftwidth=2 expandtab
 :set incsearch
 :set hlsearch
@@ -23,7 +24,9 @@ nmap <C-w>gf :tabe **/<cfile><cr>
 map <C-w>o <C-w><bar><CR><C-w>_<CR>
 let mapleader = "\<Space>"
 set laststatus=2
+autocmd FileType swift setlocal shiftwidth=4 tabstop=4
 
+" Toggle between tabs
 noremap <leader>1 1gt
 noremap <leader>2 2gt
 noremap <leader>3 3gt
@@ -35,16 +38,44 @@ noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 
+" Command T
 let g:CommandTMaxFiles=20000
 let g:CommandTFileScanner="git"
 
+" Rubocop
 let g:vimrubocop_keymap = 0
 nmap <Leader>r :RuboCop<CR>
+
+" JSONify text on window
 nmap <Leader>j :%!python -m json.tool<CR>
 
 if &term =~ "xterm" || &term =~ "screen"
 	let g:CommandTCancelMap = ['<ESC>', '<C-c>']
 endif
+
+" Delete whitespace when saving a file
+fun! <SID>StripTrailingWhitespaces()
+  let l = line(".")
+  let c = col(".")
+  %s/\s\+$//e
+  call cursor(l, c)
+endfun
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+
+map <C-n> :NERDTreeToggle<CR>
+
+" Cycle through buffers
+set hidden
+nnoremap <C-M> :bnext<CR>
+nnoremap <C-N> :bprev<CR>
+let g:buftabline_separators=1
+
+" Ack + Silver searcher
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
 
 set rtp+=~/.vim/bundle/Vundle.vim
 
@@ -56,7 +87,13 @@ Plugin 'wincent/command-t'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'gaogao1030/vim-skim'
 Plugin 'kchmck/vim-coffee-script'
-call vundle#end()            " required
+Plugin 'toyamarinyon/vim-swift'
+Plugin 'mitsuse/autocomplete-swift'
+Plugin 'scrooloose/nerdtree'
+Plugin 'mileszs/ack.vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'ap/vim-buftabline'
+call vundle#end()
 
-filetype plugin indent on    " required
+filetype plugin indent on
 filetype plugin on
