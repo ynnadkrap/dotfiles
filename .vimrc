@@ -1,11 +1,13 @@
 syntax on
-colorscheme wellsokai
+colorscheme quantum
 set nocompatible
 set ttyfast
 set mouse=a
 set ttymouse=xterm2
 set rnu
 filetype off
+:set colorcolumn=120
+:set directory=~/.vim/swapfiles//
 :set tabstop=2 shiftwidth=2 expandtab
 :set incsearch
 :set hlsearch
@@ -43,8 +45,8 @@ let g:CommandTMaxFiles=20000
 let g:CommandTFileScanner="git"
 
 " Rubocop
-let g:vimrubocop_keymap = 0
-nmap <Leader>r :RuboCop<CR>
+"let g:vimrubocop_keymap = 0
+"nmap <Leader>r :RuboCop<CR>
 
 " JSONify text on window
 nmap <Leader>j :%!python -m json.tool<CR>
@@ -62,12 +64,19 @@ fun! <SID>StripTrailingWhitespaces()
 endfun
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
-map <C-n> :NERDTreeToggle<CR>
+map <Leader>n :NERDTreeToggle<CR>
 
-" Cycle through buffers
+" Copy full path to clipboard
+nmap cq :let @*=expand("%:p")<CR>
+" Copy relative path to clipboard
+nmap cw :let @*=expand("%")<CR>
+
+" Buffer stuff
 set hidden
 nnoremap <C-M> :bnext<CR>
 nnoremap <C-N> :bprev<CR>
+nmap <Leader>dd :bd<CR><ESC>
+nmap <Leader>da :%bd<CR><ESC>
 let g:buftabline_separators=1
 
 " Ack + Silver searcher
@@ -77,11 +86,18 @@ endif
 cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
 
+let g:javascript_plugin_jsdoc = 1
+
+" Add jsx syntax highlighting for .js files
+let g:jsx_ext_required = 0
+
+let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.js"
+
 set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'ngmy/vim-rubocop'
+"Plugin 'ngmy/vim-rubocop'
 Plugin 'tpope/vim-fugitive'
 Plugin 'wincent/command-t'
 Plugin 'scrooloose/nerdcommenter'
@@ -93,6 +109,10 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'mileszs/ack.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ap/vim-buftabline'
+Plugin 'pangloss/vim-javascript'
+Plugin 'cohama/lexima.vim'
+Plugin 'mxw/vim-jsx'
+Plugin 'alvan/vim-closetag'
 call vundle#end()
 
 filetype plugin indent on
