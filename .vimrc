@@ -23,7 +23,7 @@ map <C-K> <C-W>k
 map <C-H> <C-W>h
 map <C-L> <C-W>l
 nmap <C-w>gf :tabe **/<cfile><cr>
-map <C-w>o <C-w><bar><CR><C-w>_<CR>
+map <C-w>f <C-w><bar><C-w>_
 let mapleader = "\<Space>"
 set laststatus=2
 autocmd FileType swift setlocal shiftwidth=4 tabstop=4
@@ -40,20 +40,41 @@ noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 
+" FZF
+set rtp+=/usr/local/opt/fzf
+noremap <Leader>t :FZF<CR>
+noremap <Leader>b :Buffers<CR>
+noremap <Leader>a :Ag<Space>
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+command! -bang -nargs=+ -complete=dir Ag call fzf#vim#ag_raw(<q-args>,
+\                     fzf#vim#with_preview('right:50%:hidden', '?'),
+\                     <bang>0)
+
 " Command T
-let g:CommandTMaxFiles=20000
-let g:CommandTFileScanner="git"
+"let g:CommandTMaxFiles=20000
+"let g:CommandTFileScanner="git"
 
 " Rubocop
-"let g:vimrubocop_keymap = 0
-"nmap <Leader>r :RuboCop<CR>
+let g:vimrubocop_config = '~/workspace/viewthespace/.rubocop.yml'
 
 " JSONify text on window
 nmap <Leader>j :%!python -m json.tool<CR>
 
-if &term =~ "xterm" || &term =~ "screen"
-	let g:CommandTCancelMap = ['<ESC>', '<C-c>']
-endif
+"if &term =~ "xterm" || &term =~ "screen"
+	"let g:CommandTCancelMap = ['<ESC>', '<C-c>']
+"endif
 
 " Delete whitespace when saving a file
 fun! <SID>StripTrailingWhitespaces()
@@ -79,12 +100,18 @@ nmap <Leader>dd :bd<CR><ESC>
 nmap <Leader>da :%bd<CR><ESC>
 let g:buftabline_separators=1
 
+" Move to mark
+nnoremap mm `
+
+" Search visually selected text
+vnoremap // y/<C-R>"<CR>
+
 " Ack + Silver searcher
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
-cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
+"if executable('ag')
+  "let g:ackprg = 'ag --vimgrep'
+"endif
+"cnoreabbrev Ack Ack!
+"nnoremap <Leader>a :Ack!<Space>
 
 let g:javascript_plugin_jsdoc = 1
 
@@ -97,9 +124,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
-"Plugin 'ngmy/vim-rubocop'
+Plugin 'ngmy/vim-rubocop'
 Plugin 'tpope/vim-fugitive'
-Plugin 'wincent/command-t'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'gaogao1030/vim-skim'
 Plugin 'kchmck/vim-coffee-script'
@@ -113,6 +139,9 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'cohama/lexima.vim'
 Plugin 'mxw/vim-jsx'
 Plugin 'alvan/vim-closetag'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'gregsexton/matchtag'
+Plugin 'junegunn/fzf.vim'
 call vundle#end()
 
 filetype plugin indent on
