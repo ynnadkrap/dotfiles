@@ -6,7 +6,7 @@ set mouse=a
 set ttymouse=xterm2
 set rnu
 filetype off
-:set colorcolumn=120
+":set colorcolumn=120
 :set directory=~/.vim/swapfiles//
 :set tabstop=2 shiftwidth=2 expandtab
 :set incsearch
@@ -28,6 +28,9 @@ let mapleader = "\<Space>"
 set laststatus=2
 autocmd FileType swift setlocal shiftwidth=4 tabstop=4
 
+" Ignore swap file warning message
+set shortmess+=A
+
 " Toggle between tabs
 noremap <leader>1 1gt
 noremap <leader>2 2gt
@@ -39,6 +42,13 @@ noremap <leader>7 7gt
 noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
+
+" Goyo
+noremap <Leader>gy :Goyo<CR>
+noremap <Leader>gg :Goyo!<CR>
+let g:goyo_width = 130
+let g:goyo_height = '95%'
+
 
 " FZF
 set rtp+=/usr/local/opt/fzf
@@ -61,6 +71,11 @@ let g:fzf_colors =
 command! -bang -nargs=+ -complete=dir Ag call fzf#vim#ag_raw(<q-args>,
 \                     fzf#vim#with_preview('right:50%:hidden', '?'),
 \                     <bang>0)
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit' }
+let g:fzf_layout = { 'down': '~10%' }
 
 " Command T
 "let g:CommandTMaxFiles=20000
@@ -142,6 +157,7 @@ Plugin 'alvan/vim-closetag'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'gregsexton/matchtag'
 Plugin 'junegunn/fzf.vim'
+Plugin 'junegunn/goyo.vim'
 call vundle#end()
 
 filetype plugin indent on
