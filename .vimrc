@@ -85,7 +85,7 @@ let g:fzf_layout = { 'down': '~10%' }
 let g:vimrubocop_config = '~/workspace/viewthespace/.rubocop.yml'
 
 " JSONify text on window
-nmap <Leader>j :%!python -m json.tool<CR>
+"nmap <Leader>j :%!python -m json.tool<CR>
 
 "if &term =~ "xterm" || &term =~ "screen"
 	"let g:CommandTCancelMap = ['<ESC>', '<C-c>']
@@ -106,6 +106,10 @@ map <Leader>n :NERDTreeToggle<CR>
 nmap cq :let @*=expand("%:p")<CR>
 " Copy relative path to clipboard
 nmap cw :let @*=expand("%")<CR>
+
+" Windowswap
+let g:windowswap_map_keys = 0 "prevent default bindings
+nnoremap <silent> <Leader>qq :call WindowSwap#EasyWindowSwap()<CR>
 
 " Buffer stuff
 set hidden
@@ -135,6 +139,16 @@ let g:jsx_ext_required = 0
 
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.js"
 
+" Run current test
+map <Leader>r :w\|:!rspec %<CR>
+
+" Navigate autocomplete window
+inoremap <expr> <C-j> ((pumvisible())?("\<C-n>"):("j"))
+inoremap <expr> <C-k> ((pumvisible())?("\<C-p>"):("k"))
+
+noremap <Leader>ct :!ripper-tags -R .<cr>
+set tags=./tags,tags;
+
 set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
@@ -158,6 +172,7 @@ Plugin 'leafgarland/typescript-vim'
 Plugin 'gregsexton/matchtag'
 Plugin 'junegunn/fzf.vim'
 Plugin 'junegunn/goyo.vim'
+Plugin 'wesQ3/vim-windowswap'
 call vundle#end()
 
 filetype plugin indent on
