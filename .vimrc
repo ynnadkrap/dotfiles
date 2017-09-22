@@ -1,10 +1,12 @@
 syntax on
 colorscheme quantum
-set nocompatible
+:set nosmd   " short for 'showmode'
+:set noru    " short for 'ruler'
 set ttyfast
 set mouse=a
 set ttymouse=xterm2
-set rnu
+" this is slowing things down for some reason..
+"set rnu
 filetype off
 ":set colorcolumn=120
 :set directory=~/.vim/swapfiles//
@@ -139,8 +141,14 @@ let g:jsx_ext_required = 0
 
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.js"
 
-" Run current test
-map <Leader>r :w\|:!rspec %<CR>
+" RSpec.vim mappings
+map <Leader>r :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+let g:rspec_command = "!spring rspec {spec}"
+
+noremap <Leader>[ :set relativenumber<CR>
+noremap <Leader>] :set norelativenumber<CR>
 
 " Navigate autocomplete window
 inoremap <expr> <C-j> ((pumvisible())?("\<C-n>"):("j"))
@@ -151,15 +159,35 @@ set tags=./tags,tags;
 
 set rtp+=~/.vim/bundle/Vundle.vim
 
+
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'filename', 'readonly' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head',
+      \   'filename': "LightlineFilename",
+      \ },
+      \ }
+
+function! LightlineFilename()
+  return &filetype ==# 'vimfiler' ? vimfiler#get_status_string() :
+        \ &filetype ==# 'unite' ? unite#get_status_string() :
+        \ &filetype ==# 'vimshell' ? vimshell#get_status_string() :
+        \ expand('%:f') !=# '' ? expand('%:f') : '[No Name]'
+endfunction
+
+let g:unite_force_overwrite_statusline = 0
+let g:vimfiler_force_overwrite_statusline = 0
+let g:vimshell_force_overwrite_statusline = 0
+
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'ngmy/vim-rubocop'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'gaogao1030/vim-skim'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'toyamarinyon/vim-swift'
-Plugin 'mitsuse/autocomplete-swift'
 Plugin 'scrooloose/nerdtree'
 Plugin 'mileszs/ack.vim'
 Plugin 'airblade/vim-gitgutter'
@@ -168,11 +196,16 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'cohama/lexima.vim'
 Plugin 'mxw/vim-jsx'
 Plugin 'alvan/vim-closetag'
-Plugin 'leafgarland/typescript-vim'
 Plugin 'gregsexton/matchtag'
 Plugin 'junegunn/fzf.vim'
 Plugin 'junegunn/goyo.vim'
 Plugin 'wesQ3/vim-windowswap'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-rails'
+Plugin 'thoughtbot/vim-rspec'
+Plugin 'mattn/webapi-vim'
+Plugin 'mattn/gist-vim'
+Plugin 'itchyny/lightline.vim'
 call vundle#end()
 
 filetype plugin indent on
