@@ -1,4 +1,5 @@
 syntax on
+set termguicolors
 colorscheme quantum
 :set nosmd   " short for 'showmode'
 :set noru    " short for 'ruler'
@@ -9,7 +10,6 @@ set ttymouse=xterm2
 "set rnu
 filetype off
 ":set colorcolumn=120
-:set directory=~/.vim/swapfiles//
 :set tabstop=2 shiftwidth=2 expandtab
 :set incsearch
 :set hlsearch
@@ -57,6 +57,7 @@ set rtp+=/usr/local/opt/fzf
 noremap <Leader>t :FZF<CR>
 noremap <Leader>b :Buffers<CR>
 noremap <Leader>a :Ag<Space>
+noremap <Leader>g yiw :Ag<Space><C-R>"<CR>
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -83,8 +84,9 @@ let g:fzf_layout = { 'down': '~10%' }
 "let g:CommandTMaxFiles=20000
 "let g:CommandTFileScanner="git"
 
+set backspace=indent,eol,start
 " Rubocop
-let g:vimrubocop_config = '~/workspace/viewthespace/.rubocop.yml'
+let g:vimrubocop_config = '~/workspace/occupier/.rubocop.yml'
 
 " JSONify text on window
 "nmap <Leader>j :%!python -m json.tool<CR>
@@ -183,6 +185,18 @@ let g:unite_force_overwrite_statusline = 0
 let g:vimfiler_force_overwrite_statusline = 0
 let g:vimshell_force_overwrite_statusline = 0
 
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+
+autocmd FileType typescript nmap <buffer> <Leader>h : <C-u>echo tsuquyomi#hint()<CR>
+
+let g:ale_fixers = {
+\   'javascript': ['prettier', 'tslint'],
+\   'ruby': ['rubocop'],
+\}
+let g:ale_enabled = 1
+let g:ale_fix_on_save = 1
+
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'ngmy/vim-rubocop'
@@ -195,8 +209,8 @@ Plugin 'ap/vim-buftabline'
 Plugin 'pangloss/vim-javascript'
 Plugin 'cohama/lexima.vim'
 Plugin 'mxw/vim-jsx'
-Plugin 'alvan/vim-closetag'
-Plugin 'gregsexton/matchtag'
+"Plugin 'alvan/vim-closetag'
+"Plugin 'gregsexton/matchtag'
 Plugin 'junegunn/fzf.vim'
 Plugin 'junegunn/goyo.vim'
 Plugin 'wesQ3/vim-windowswap'
@@ -206,6 +220,12 @@ Plugin 'thoughtbot/vim-rspec'
 Plugin 'mattn/webapi-vim'
 Plugin 'mattn/gist-vim'
 Plugin 'itchyny/lightline.vim'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'Quramy/tsuquyomi'
+Plugin 'prettier/vim-prettier'
+Plugin 'w0rp/ale'
+Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
 
 filetype plugin indent on
