@@ -65,6 +65,7 @@ ZSH_THEME="miloshadzic"
 plugins=(
   git
   zsh-autosuggestions
+  vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh
