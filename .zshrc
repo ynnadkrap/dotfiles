@@ -116,11 +116,8 @@ export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 eval "$(hub alias -s)"
 
-bindkey '^ ' autosuggest-accept
+bindkey '^]' autosuggest-accept
 
-source /usr/local/share/chruby/chruby.sh
-
-source /usr/local/share/chruby/auto.sh
 
 function glc {
   git branch --sort=-committerdate | head -10 | nl
@@ -128,8 +125,6 @@ function glc {
   branch=$(git for-each-ref --count="$num" --sort=-committerdate refs/heads/ --format='%(refname:short)' | tail -1)
   git checkout $branch
 }
-
-chruby ruby-2.5.3
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -170,3 +165,18 @@ fkill() {
         echo $pid | xargs kill -${1:-9}
     fi
 }
+
+fixup () {
+  git commit --fixup=$1 && git rebase -i --autosquash master
+}
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/dannypark/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/dannypark/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/dannypark/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/dannypark/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="/usr/local/opt/postgresql@10/bin:$PATH"

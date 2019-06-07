@@ -46,10 +46,10 @@ noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 
 " Goyo
-noremap <Leader>gy :Goyo<CR>
-noremap <Leader>gg :Goyo!<CR>
+noremap <Leader>gg :Goyo<CR>
+noremap <Leader>gy :Goyo!<CR>
 let g:goyo_width = 130
-let g:goyo_height = '95%'
+let g:goyo_height = '100%'
 
 
 " FZF
@@ -141,13 +141,13 @@ let g:javascript_plugin_jsdoc = 1
 " Add jsx syntax highlighting for .js files
 let g:jsx_ext_required = 0
 
-let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.js"
+let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.js,*.tsx,*.ts"
 
 " RSpec.vim mappings
 map <Leader>r :call RunCurrentSpecFile()<CR>
 map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
-let g:rspec_command = "!spring rspec {spec}"
+"let g:rspec_command = "!spring rspec {spec}"
 
 noremap <Leader>[ :set relativenumber<CR>
 noremap <Leader>] :set norelativenumber<CR>
@@ -186,16 +186,34 @@ let g:vimfiler_force_overwrite_statusline = 0
 let g:vimshell_force_overwrite_statusline = 0
 
 let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+"autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
 
+" tooltip balloon for typescript
 autocmd FileType typescript nmap <buffer> <Leader>h : <C-u>echo tsuquyomi#hint()<CR>
 
 let g:ale_fixers = {
-\   'javascript': ['prettier', 'tslint'],
+\   'javascript': ['prettier', 'eslint'],
+\   'typescript': ['tslint', 'prettier'],
 \   'ruby': ['rubocop'],
 \}
+let g:ale_lint_delay = 1000
 let g:ale_enabled = 1
 let g:ale_fix_on_save = 1
+"let g:ale_set_loclist = 0
+"let g:ale_set_quickfix = 1
+"let g:ale_open_list = 1
+
+let g:ycm_filetype_blacklist = {
+      \ 'ruby': 1,
+      \ }
+
+" autoclose preview window on selection
+let g:ycm_autoclose_preview_window_after_completion = 1
+
+let g:tsuquyomi_disable_quickfix = 1
+
+let g:UltiSnipsExpandTrigger = "<C-x>"
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
 
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
@@ -207,10 +225,8 @@ Plugin 'mileszs/ack.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ap/vim-buftabline'
 Plugin 'pangloss/vim-javascript'
-Plugin 'cohama/lexima.vim'
+"Plugin 'jiangmiao/auto-pairs'
 Plugin 'mxw/vim-jsx'
-"Plugin 'alvan/vim-closetag'
-"Plugin 'gregsexton/matchtag'
 Plugin 'junegunn/fzf.vim'
 Plugin 'junegunn/goyo.vim'
 Plugin 'wesQ3/vim-windowswap'
@@ -223,9 +239,12 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'Quramy/tsuquyomi'
-Plugin 'prettier/vim-prettier'
+"Plugin 'prettier/vim-prettier'
 Plugin 'w0rp/ale'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'tpope/vim-endwise'
+Plugin 'SirVer/ultisnips'
+Plugin 'machakann/vim-highlightedyank'
 call vundle#end()
 
 filetype plugin indent on
