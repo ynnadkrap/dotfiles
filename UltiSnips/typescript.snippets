@@ -1,0 +1,58 @@
+snippet comp
+import * as React from "react"
+import withStyles, {
+  StyledComponentProps
+} from "@material-ui/core/styles/withStyles"
+import { FormattedMessage } from "react-intl"
+
+const decorate = withStyles((theme) => ({}))
+
+type StyleProps = StyledComponentProps<"">
+
+interface IProps {}
+
+const $1: React.FC<IProps & StyleProps> = ({
+	classes
+}) => (
+	<div>
+	hello
+	</div>
+)
+
+export const Base = $1
+export default decorate($1)
+endsnippet
+
+snippet test
+import * as React from "react"
+import * as ShallowRenderer from "react-test-renderer/shallow"
+
+import { Base as Component } from "./Page"
+
+describe($1, () => {
+  it("renders correctly", () => {
+    const component = ShallowRenderer.createRenderer().render(
+      <Component />
+    )
+
+    expect(component).toMatchSnapshot()
+  })
+})
+endsnippet
+
+snippet container
+import { connect } from "react-redux"
+
+import { IRootState } from "reducers"
+import $1 from "./$1"
+
+const mapStateToProps = (state: IRootState) => {
+	const {
+		resources
+	} = state
+
+	return {}
+}
+
+export default connect(mapStateToProps)($1)
+endsnippet
